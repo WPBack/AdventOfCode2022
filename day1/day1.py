@@ -15,7 +15,7 @@ def input_parser(filename):
         if line == '\n':
             calories.append([])
         else:
-            calories[-1].append(int(line[:-1]))
+            calories[-1].append(int(line))
 
 
     # Close the file and return the result
@@ -32,8 +32,9 @@ def puzzle1(filename):
 def puzzle2(filename):
     # Read file
     inputs = input_parser(filename)
-
-    return 0
+    caloriesSorted = [sum(cal) for cal in inputs]
+    caloriesSorted.sort()
+    return sum(caloriesSorted[-3:])
 
 # Run tests for puzzle 1
 puzzle1TestPass = puzzle1('example1') == 24000
@@ -47,7 +48,7 @@ if(puzzle1TestPass):
     print('Solution for puzzle 1: ' + str(puzzle1('input')))
 
 # Run tests for puzzle 2
-puzzle2TestPass = puzzle2('example1') == 2
+puzzle2TestPass = puzzle2('example1') == 45000
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
