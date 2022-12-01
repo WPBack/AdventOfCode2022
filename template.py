@@ -9,23 +9,23 @@ def input_parser(filename):
     inputFile = open(os.path.join(__location__, filename), 'r')
 
     # Process the file
-    input = inputFile.readlines()
+    inputs = inputFile.readlines()
 
     # Close the file and return the result
     inputFile.close()
-    return input
+    return inputs
 
 # Puzzle 1
 def puzzle1(filename):
     # Read file
-    input = input_parser(filename)
+    inputs = input_parser(filename)
 
     return 0
 
 # Puzzle 2
 def puzzle2(filename):
     # Read file
-    input = input_parser(filename)
+    inputs = input_parser(filename)
 
     return 0
 
