@@ -9,7 +9,7 @@ def input_parser(filename):
     inputFile = open(os.path.join(__location__, filename), 'r')
 
     # Process the file
-    inputs = inputFile.readlines()
+    inputs = inputFile.read().splitlines()
 
     # Close the file and return the result
     inputFile.close()
