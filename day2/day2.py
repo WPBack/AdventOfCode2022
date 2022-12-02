@@ -2,8 +2,8 @@
 import os
 from termcolor import colored
 
-# Input parser
-def input_parser(filename):
+# Input parser for part 1
+def input_parser1(filename):
     # Open the file
     __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     inputFile = open(os.path.join(__location__, filename), 'r')
@@ -25,6 +25,36 @@ def input_parser(filename):
             me = 'paper'
         else:
             me = 'sissors'
+
+        games.append((opponent, me))
+
+    # Close the file and return the result
+    inputFile.close()
+    return games
+
+# Input parser for part 2
+def input_parser2(filename):
+    # Open the file
+    __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+    inputFile = open(os.path.join(__location__, filename), 'r')
+
+    # Process the file
+    lines = inputFile.read().splitlines()
+    games = []
+    for line in lines:
+        if line[0] == 'A':
+            opponent = 'rock'
+        elif line[0] == 'B':
+            opponent = 'paper'
+        else:
+            opponent = 'sissors'
+
+        if line[2] == 'X':
+            me = 'loss'
+        elif line[2] == 'Y':
+            me = 'draw'
+        else:
+            me = 'win'
 
         games.append((opponent, me))
 
@@ -59,7 +89,7 @@ def play(game):
 # Puzzle 1
 def puzzle1(filename):
     # Read file
-    games = input_parser(filename)
+    games = input_parser1(filename)
 
     points = 0
     for game in games:
@@ -81,9 +111,48 @@ def puzzle1(filename):
 # Puzzle 2
 def puzzle2(filename):
     # Read file
-    games = input_parser(filename)
+    games = input_parser2(filename)
 
-    return 0
+    points = 0
+    for game in games:
+        # Find what to do
+        if game[0] == 'rock':
+            if game[1] == 'win':
+                gameToPlay = (game[0], 'paper')
+            elif game[1] == 'draw':
+                gameToPlay = (game[0], 'rock')
+            else:
+                gameToPlay = (game[0], 'sissors')
+        elif game[0] == 'paper':
+            if game[1] == 'win':
+                gameToPlay = (game[0], 'sissors')
+            elif game[1] == 'draw':
+                gameToPlay = (game[0], 'paper')
+            else:
+                gameToPlay = (game[0], 'rock')
+        else:
+            if game[1] == 'win':
+                gameToPlay = (game[0], 'rock')
+            elif game[1] == 'draw':
+                gameToPlay = (game[0], 'sissors')
+            else:
+                gameToPlay = (game[0], 'paper')
+
+        # Calculate point
+        result = play(gameToPlay)
+        if result == 'win':
+            points += 6
+        elif result == 'draw':
+            points += 3
+        
+        if gameToPlay[1] == 'rock':
+            points += 1
+        elif gameToPlay[1] == 'paper':
+            points += 2
+        else:
+            points += 3
+
+    return points
 
 # Run tests for puzzle 1
 puzzle1TestPass = puzzle1('example1') == 15
@@ -97,7 +166,7 @@ if(puzzle1TestPass):
     print('Solution for puzzle 1: ' + str(puzzle1('input')))
 
 # Run tests for puzzle 2
-puzzle2TestPass = puzzle2('example1') == 2
+puzzle2TestPass = puzzle2('example1') == 12
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
