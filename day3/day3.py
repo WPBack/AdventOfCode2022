@@ -38,9 +38,17 @@ def puzzle1(filename):
 # Puzzle 2
 def puzzle2(filename):
     # Read file
-    inputs = input_parser(filename)
+    rucksacks = input_parser(filename)
 
-    return 0
+    result = 0
+    for i in range(0, len(rucksacks), 3):
+        rucksack1 = set(rucksacks[i][0]).union(rucksacks[i][1])
+        rucksack2 = set(rucksacks[i+1][0]).union(rucksacks[i+1][1])
+        rucksack3 = set(rucksacks[i+2][0]).union(rucksacks[i+2][1])
+
+        result += set.intersection(rucksack1, rucksack2, rucksack3).pop()
+
+    return result
 
 # Run tests for puzzle 1
 puzzle1Result = puzzle1('example1')
@@ -56,7 +64,7 @@ if(puzzle1TestPass):
 
 # Run tests for puzzle 2
 puzzle2Result = puzzle2('example1')
-puzzle2TestPass = puzzle2Result == 2
+puzzle2TestPass = puzzle2Result == 70
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
