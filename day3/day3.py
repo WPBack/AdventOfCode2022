@@ -2,6 +2,13 @@
 import os
 from termcolor import colored
 
+# Helper to convert character into priority
+def get_prio(item):
+    if item.islower():
+        return ord(item) - 96
+    else:
+        return ord(item) - 38
+
 # Input parser
 def input_parser(filename):
     # Open the file
@@ -9,18 +16,24 @@ def input_parser(filename):
     inputFile = open(os.path.join(__location__, filename), 'r')
 
     # Process the file
-    inputs = inputFile.read().splitlines()
+    lines = inputFile.read().splitlines()
+
+    rucksacks = []
+    for line in lines:
+        compartment1 = [get_prio(item) for item in line[:len(line)//2]]
+        compartment2 = [get_prio(item) for item in line[len(line)//2:]]
+        rucksacks.append((compartment1, compartment2))
 
     # Close the file and return the result
     inputFile.close()
-    return inputs
+    return rucksacks
 
 # Puzzle 1
 def puzzle1(filename):
     # Read file
-    inputs = input_parser(filename)
+    rucksacks = input_parser(filename)
 
-    return 0
+    return sum([set(rucksack[0]).intersection(rucksack[1]).pop() for rucksack in rucksacks])
 
 # Puzzle 2
 def puzzle2(filename):
@@ -31,7 +44,7 @@ def puzzle2(filename):
 
 # Run tests for puzzle 1
 puzzle1Result = puzzle1('example1')
-puzzle1TestPass = puzzle1Result == 1
+puzzle1TestPass = puzzle1Result == 157
 if(puzzle1TestPass):
     print(colored('Tests for puzzle 1 PASS', 'green'))
 else:
