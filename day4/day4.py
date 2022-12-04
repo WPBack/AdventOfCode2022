@@ -33,8 +33,13 @@ def puzzle1(filename):
 def puzzle2(filename):
     # Read file
     inputs = input_parser(filename)
+    
+    result = 0
+    for pair in inputs:
+        if (pair[0] <= pair[2] and pair[1] >= pair[2]) or (pair[2] <= pair[0] and pair[3] >= pair[0]):
+            result += 1
 
-    return 0
+    return result
 
 # Run tests for puzzle 1
 puzzle1Result = puzzle1('example1')
@@ -50,7 +55,7 @@ if(puzzle1TestPass):
 
 # Run tests for puzzle 2
 puzzle2Result = puzzle2('example1')
-puzzle2TestPass = puzzle2Result == 2
+puzzle2TestPass = puzzle2Result == 4
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
