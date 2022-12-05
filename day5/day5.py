@@ -59,9 +59,18 @@ def puzzle1(filename):
 # Puzzle 2
 def puzzle2(filename):
     # Read file
-    inputs = input_parser(filename)
+    (stacks, instructions) = input_parser(filename)
 
-    return 0
+    # Perform the instructions
+    for instruction in instructions:
+        stacks[instruction[2]-1].extend(stacks[instruction[1]-1][-instruction[0]:])
+        del stacks[instruction[1]-1][-instruction[0]:]
+
+    # Put together the result
+    result = ''
+    for stack in stacks:
+        result += stack.pop()
+    return result
 
 # Run tests for puzzle 1
 puzzle1Result = puzzle1('example1')
@@ -77,7 +86,7 @@ if(puzzle1TestPass):
 
 # Run tests for puzzle 2
 puzzle2Result = puzzle2('example1')
-puzzle2TestPass = puzzle2Result == 2
+puzzle2TestPass = puzzle2Result == 'MCD'
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
