@@ -31,7 +31,11 @@ def puzzle2(filename):
     # Read file
     inputs = input_parser(filename)
 
-    return 0
+    result = 14
+    while len(set(inputs[result-14:result])) != 14:
+        result += 1
+
+    return result
 
 # Run tests for puzzle 1
 puzzle1Result1 = puzzle1('example1')
@@ -50,12 +54,16 @@ if(puzzle1TestPass):
     print('Solution for puzzle 1: ' + str(puzzle1('input')))
 
 # Run tests for puzzle 2
-puzzle2Result = puzzle2('example1')
-puzzle2TestPass = puzzle2Result == 2
+puzzle2Result1 = puzzle2('example1')
+puzzle2Result2 = puzzle2('example2')
+puzzle2Result3 = puzzle2('example3')
+puzzle2Result4 = puzzle2('example4')
+puzzle2Result5 = puzzle2('example5')
+puzzle2TestPass = puzzle2Result1 == 19 and puzzle2Result2 == 23 and puzzle2Result3 == 23 and puzzle2Result4 == 29 and puzzle2Result5 == 26
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
-    print(colored(f'Tests for puzzle 2 FAIL, got {puzzle2Result}', 'red'))
+    print(colored(f'Tests for puzzle 2 FAIL, got {puzzle2Result1}, {puzzle2Result2}, {puzzle2Result3}, {puzzle2Result4}, {puzzle2Result5}', 'red'))
 
 # Solve puzzle 2 if test passed
 if(puzzle2TestPass):
