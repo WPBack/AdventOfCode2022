@@ -82,12 +82,25 @@ def puzzle1(filename):
     
     return get_sum_of_small_dirs(root)
 
+# Recursive helper (that calls recursive function :O) that finds the smallest large enough directory
+def get_size_of_smallest_dir_large_enough(dir, requiredSize, smallestSoFar):
+    size = dir.get_size()
+    if size < smallestSoFar and size >= requiredSize:
+            smallestSoFar = size
+    for child in dir.children:
+        smallest = get_size_of_smallest_dir_large_enough(child, requiredSize, smallestSoFar)
+        if smallest < smallestSoFar and smallest >= requiredSize:
+            smallestSoFar = smallest
+    return smallestSoFar
+
 # Puzzle 2
 def puzzle2(filename):
     # Read file
-    inputs = input_parser(filename)
+    root = input_parser(filename)
 
-    return 0
+    requiredSize = root.get_size() - 40000000
+
+    return get_size_of_smallest_dir_large_enough(root, requiredSize, root.get_size())
 
 # Run tests for puzzle 1
 puzzle1Result = puzzle1('example1')
@@ -103,7 +116,7 @@ if(puzzle1TestPass):
 
 # Run tests for puzzle 2
 puzzle2Result = puzzle2('example1')
-puzzle2TestPass = puzzle2Result == 2
+puzzle2TestPass = puzzle2Result == 24933642
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
