@@ -1,6 +1,7 @@
 # Import modules
 import os
 from termcolor import colored
+import numpy as np
 
 # Input parser
 def input_parser(filename):
@@ -61,9 +62,56 @@ def puzzle1(filename):
 # Puzzle 2
 def puzzle2(filename):
     # Read file
-    inputs = input_parser(filename)
+    trees = np.array(input_parser(filename))
 
-    return 0
+    # Find the most scenic spot
+    mostScenic = 0
+    for row in range(1, len(trees)-1):
+        for col in range(1, len(trees[0])-1):
+            height = trees[row, col]
+            viewDown = 0
+            canSeeDown = True
+            viewUp = 0
+            canSeeUp = True
+            viewRight = 0
+            canSeeRight = True
+            viewLeft = 0
+            canSeeLeft = True
+
+            # Look down
+            for tree in trees[row+1:len(trees), col]:
+                if canSeeDown:
+                    viewDown += 1
+                if tree >= height:
+                    canSeeDown = False
+
+            # Look up
+            for tree in reversed(trees[0:row, col]):
+                if canSeeUp:
+                    viewUp += 1
+                if tree >= height:
+                    canSeeUp = False
+
+            # Look right
+            for tree in trees[row, col+1:len(trees[0])]:
+                if canSeeRight:
+                    viewRight += 1
+                if tree >= height:
+                    canSeeRight = False
+
+            # Look left
+            for tree in reversed(trees[row, 0:col]):
+                if canSeeLeft:
+                    viewLeft += 1
+                if tree >= height:
+                    canSeeLeft = False
+        
+            # Update highscore
+            score = viewDown*viewUp*viewRight*viewLeft
+            if score > mostScenic:
+                mostScenic = score
+
+    return mostScenic
 
 # Run tests for puzzle 1
 puzzle1Result = puzzle1('example1')
@@ -79,7 +127,7 @@ if(puzzle1TestPass):
 
 # Run tests for puzzle 2
 puzzle2Result = puzzle2('example1')
-puzzle2TestPass = puzzle2Result == 2
+puzzle2TestPass = puzzle2Result == 8
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
