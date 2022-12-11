@@ -41,6 +41,27 @@ class Monkey:
 
         self.items = []
 
+    def playRoundPart2(self, monkeys):
+        self.numInspected += len(self.items)
+        for item in self.items:
+            if self.operation == '*':
+                if self.operationArg == 'old':
+                    item *= item
+                else:
+                    item *= int(self.operationArg)
+            else:
+                if self.operationArg == 'old':
+                    item += item
+                else:
+                    item += int(self.operationArg)
+
+            if item%self.testDivisable == 0:
+                monkeys[self.trueTarget].addItem(item)
+            else:
+                monkeys[self.falseTarget].addItem(item)
+
+        self.items = []
+
 
 # Input parser
 def input_parser(filename):
@@ -76,9 +97,17 @@ def puzzle1(filename):
 # Puzzle 2
 def puzzle2(filename):
     # Read file
-    inputs = input_parser(filename)
+    monkeys = input_parser(filename)
+    
+    # Play the game for 1000 iterations
+    for game in range(1000):
+        for monkey in monkeys:
+            monkey.playRound(monkeys)
+        print(f'Game {game} completed, {game/10}%')
 
-    return 0
+    # Return the multiplication of the most active monkeys
+    sortedNumInspected = sorted([monkey.numInspected for monkey in monkeys])
+    return sortedNumInspected[-1]*sortedNumInspected[-2]
 
 # Run tests for puzzle 1
 puzzle1Result = puzzle1('example1')
@@ -94,7 +123,7 @@ if(puzzle1TestPass):
 
 # Run tests for puzzle 2
 puzzle2Result = puzzle2('example1')
-puzzle2TestPass = puzzle2Result == 2
+puzzle2TestPass = puzzle2Result == 2713310158
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
