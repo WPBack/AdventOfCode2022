@@ -43,9 +43,33 @@ def puzzle1(filename):
 # Puzzle 2
 def puzzle2(filename):
     # Read file
-    inputs = input_parser(filename)
+    lines = input_parser(filename)
 
-    return 0
+    x = 1
+    image = ''
+    cycle = 1
+    row = 0
+    cyclesLeftOnInstruction = 0
+    for line in lines:
+        if line[0:4] == 'noop':
+            cyclesLeftOnInstruction = 0
+        elif line[0:4] == 'addx':
+            cyclesLeftOnInstruction = 1
+
+        for i in range(cyclesLeftOnInstruction+1):
+            if abs(cycle - 1 - row*40 - x) <= 1:
+                image += '#'
+            else:
+                image += '.'
+            if cycle % 40 == 0:
+                image += '\n'
+                row += 1
+            cycle += 1
+
+        if line[0:4] == 'addx':
+            x += int(line[5:])
+
+    return image
 
 # Run tests for puzzle 1
 puzzle1Result0 = puzzle1('example0')
@@ -62,12 +86,12 @@ if(puzzle1TestPass):
 
 # Run tests for puzzle 2
 puzzle2Result = puzzle2('example1')
-puzzle2TestPass = puzzle2Result == 2
+puzzle2TestPass = puzzle2Result == '##..##..##..##..##..##..##..##..##..##..\n###...###...###...###...###...###...###.\n####....####....####....####....####....\n#####.....#####.....#####.....#####.....\n######......######......######......####\n#######.......#######.......#######.....\n'
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
-    print(colored(f'Tests for puzzle 2 FAIL, got {puzzle2Result}', 'red'))
+    print(colored(f'Tests for puzzle 2 FAIL, got \n{puzzle2Result}', 'red'))
 
 # Solve puzzle 2 if test passed
 if(puzzle2TestPass):
-    print('Solution for puzzle 2: ' + str(puzzle2('input')))
+    print('Solution for puzzle 2:\n' + str(puzzle2('input')))
