@@ -41,7 +41,7 @@ class Monkey:
 
         self.items = []
 
-    def playRoundPart2(self, monkeys):
+    def playRoundPart2(self, monkeys, maxItemSize):
         self.numInspected += len(self.items)
         for item in self.items:
             if self.operation == '*':
@@ -54,6 +54,9 @@ class Monkey:
                     item += item
                 else:
                     item += int(self.operationArg)
+
+            while item > maxItemSize:
+                item -= maxItemSize
 
             if item%self.testDivisable == 0:
                 monkeys[self.trueTarget].addItem(item)
@@ -98,12 +101,16 @@ def puzzle1(filename):
 def puzzle2(filename):
     # Read file
     monkeys = input_parser(filename)
-    
+
+    maxItemSize = 1
+    for monkey in monkeys:
+        maxItemSize *= monkey.testDivisable
+
     # Play the game for 1000 iterations
-    for game in range(1000):
+    for game in range(10000):
         for monkey in monkeys:
-            monkey.playRound(monkeys)
-        print(f'Game {game} completed, {game/10}%')
+            monkey.playRoundPart2(monkeys, maxItemSize)
+        print(f'Game {game} completed, {game/100}%')
 
     # Return the multiplication of the most active monkeys
     sortedNumInspected = sorted([monkey.numInspected for monkey in monkeys])
