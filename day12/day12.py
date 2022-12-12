@@ -3,6 +3,7 @@ import os
 from termcolor import colored
 import numpy as np
 import sys
+import matplotlib.pylab as plt
 
 # Input parser
 def input_parser(filename):
@@ -68,18 +69,18 @@ def puzzle1(filename):
 def puzzle2(filename):
     # Read file
     (pos, goal, map) = input_parser(filename)
+    costMap = np.matrix(np.ones(map.shape) * np.inf)
 
     sys.setrecursionlimit(10000)
-    shortest = np.inf
+    progress = 0
     for row in range(map.shape[0]):
         for col in range(map.shape[1]):
             if map[row, col] == 0:
-                costMap = np.matrix(np.ones(map.shape) * np.inf)
                 cheapest_path((row, col), goal, 0, map, costMap)
-                if costMap[goal] < shortest:
-                    shortest = costMap[goal]
+            progress += 1
+            print(f'{progress*100/map.size}%')
 
-    return shortest
+    return costMap[goal]
 
 # Run tests for puzzle 1
 puzzle1Result = puzzle1('example1')
