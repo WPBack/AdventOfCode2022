@@ -67,9 +67,19 @@ def puzzle1(filename):
 # Puzzle 2
 def puzzle2(filename):
     # Read file
-    inputs = input_parser(filename)
+    (pos, goal, map) = input_parser(filename)
 
-    return 0
+    sys.setrecursionlimit(10000)
+    shortest = np.inf
+    for row in range(map.shape[0]):
+        for col in range(map.shape[1]):
+            if map[row, col] == 0:
+                costMap = np.matrix(np.ones(map.shape) * np.inf)
+                cheapest_path((row, col), goal, 0, map, costMap)
+                if costMap[goal] < shortest:
+                    shortest = costMap[goal]
+
+    return shortest
 
 # Run tests for puzzle 1
 puzzle1Result = puzzle1('example1')
@@ -81,11 +91,11 @@ else:
 
 # Solve puzzle 1 if test passed
 if(puzzle1TestPass):
-    print('Solution for puzzle 1: ' + str(puzzle1('input')))
+    print('Solution for puzzle 1: ' + str(puzzle1('input'))) # Commented out to save time
 
 # Run tests for puzzle 2
 puzzle2Result = puzzle2('example1')
-puzzle2TestPass = puzzle2Result == 2
+puzzle2TestPass = puzzle2Result == 29
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
