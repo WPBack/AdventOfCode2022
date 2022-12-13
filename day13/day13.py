@@ -63,9 +63,32 @@ def puzzle1(filename):
 # Puzzle 2
 def puzzle2(filename):
     # Read file
-    inputs = input_parser(filename)
+    packets = input_parser(filename)
 
-    return 0
+    # Insert the divider packets
+    packets.append([[2]])
+    packets.append([[6]])
+
+    # Sort packets using bubble sort
+    sorted = False
+    while not sorted:
+        sorted = True
+        for i in range(0, len(packets)-1):
+            if not right_order(packets[i], packets[i+1]):
+                packetBackup = packets[i]
+                packets[i] = packets[i+1]
+                packets[i+1] = packetBackup
+                sorted = False
+    
+    # Find the divider packets
+    packet2Id = 0
+    packet6Id = 0
+    for i in range(len(packets)):
+        if packets[i] == [[2]]:
+            packet2Id = i+1
+        elif packets[i] == [[6]]:
+            packet6Id = i+1
+    return packet2Id*packet6Id
 
 # Run tests for puzzle 1
 puzzle1Result = puzzle1('example1')
@@ -81,7 +104,7 @@ if(puzzle1TestPass):
 
 # Run tests for puzzle 2
 puzzle2Result = puzzle2('example1')
-puzzle2TestPass = puzzle2Result == 2
+puzzle2TestPass = puzzle2Result == 140
 if(puzzle2TestPass):
     print(colored('Tests for puzzle 2 PASS', 'green'))
 else:
